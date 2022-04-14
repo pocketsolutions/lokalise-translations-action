@@ -56,7 +56,7 @@ jobs:
           download: true
 ```
 
-The available options are:
+### Usage options
 
 - **token** `string` - A Lokalise API Token.
 - **project** `string` - The Lokalise project id.
@@ -66,11 +66,7 @@ The available options are:
 
 ## Testing
 
-The easiest way to test a GitHub Action is to, you guessed it, run it in GitHub. Every pull request you make will run the action twice. Once for uploading translation files and once for downloading them.
+The easiest way to test a GitHub Action is to, you guessed it, run it in GitHub. Follow these steps to test your changes. Every push to a Pull Request will automatically trigger a test for both uploading and downloading. The Pull Request workflow needs two environment secrets:
 
-## Repository Setup
-
-The following secrets has to be added to GitHub Actions Secrets:
-
-- `LOKALISE_TEST_PROJECT` - The ID of the `GitHub Action` project in Lokalise.
-- `LOKALISE_TEST_TOKEN` - A Lokalise API Token with read and write access to the `GitHub Action` project.
+- `LOKALISE_TEST_TOKEN` - A Lokalise API Token
+- `LOKALISE_TEST_PROJECT` - A Lokalise project id
