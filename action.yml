@@ -1,0 +1,30 @@
+name: Action For Translations
+description: GitHub Action for pushing and pulling translations
+author: emilnordh
+inputs:
+  token:
+    required: true
+    description: Lokalise API Token
+  project:
+    required: true
+    description: Lokalise Project ID
+  path:
+    required: true
+    description: |
+      Direcotry path for translation files to upload. It supports path-to-regexp expressions and you must define the :locale param. Example: ./examples/:locale/messages.po.
+  upload:
+    required: false
+    default: false
+    description: Set this to true to upload translation files.
+  download:
+    required: false
+    default: false
+    description: Set this to true to download translation files.
+outputs:
+  uploads:
+    description: A new-line separated list of all the uploaded translation files
+  downloads:
+    description: A new-line separated list of all the downloaded translation files
+runs:
+  using: docker
+  image: Dockerfile
