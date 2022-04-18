@@ -6,8 +6,6 @@ WORKDIR /usr/src/app
 # Build step
 FROM base AS builder
 
-ARG NPM_TOKEN
-
 # Copy files necessary for install
 COPY package*.json ./
 
