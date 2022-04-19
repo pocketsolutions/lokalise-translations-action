@@ -10,7 +10,7 @@ FROM base AS builder
 COPY package*.json ./
 
 # Install
-RUN npm install
+RUN npm ci
 
 # Copy files necessary for build
 COPY ./src ./src
