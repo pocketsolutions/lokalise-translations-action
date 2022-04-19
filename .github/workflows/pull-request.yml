@@ -1,0 +1,55 @@
+name: Pull Request
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Use Node.js version from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install package dependencies
+        run: npm ci
+      - name: Lint code
+        run: npm run lint
+  test_upload:
+    name: Test Upload Translations
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Action
+        id: upload
+        uses: ./
+        with:
+          token: ${{ secrets.LOKALISE_TEST_TOKEN }}
+          project: ${{ secrets.LOKALISE_TEST_PROJECT }}
+          path: ./examples/:locale/messages.po
+          upload: true
+      - name: Output
+        run: |
+          echo "${{steps.upload.outputs.uploads}}"
+  test_download:
+    name: Test Download Translations
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Action
+        id: download
+        uses: ./
+        with:
+          token: ${{ secrets.LOKALISE_TEST_TOKEN }}
+          project: ${{ secrets.LOKALISE_TEST_PROJECT }}
+          path: ./examples/:locale/messages.po
+          download: true
+      - name: Output
+        run: |
+          echo "${{steps.download.outputs.downloads}}"
