@@ -1,5 +1,5 @@
 # Shared
-FROM node:16.14-alpine AS base
+FROM node:17.9.0-alpine AS base
 
 WORKDIR /usr/src/app
 
