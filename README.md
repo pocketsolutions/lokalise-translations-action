@@ -70,3 +70,14 @@ The easiest way to test a GitHub Action is to, you guessed it, run it in GitHub.
 
 - `LOKALISE_TEST_TOKEN` - A Lokalise API Token
 - `LOKALISE_TEST_PROJECT` - A Lokalise project id
+
+## Release
+
+Follow these steps to make a release:
+
+1. Go to the repoistory.
+1. Click on the `Actions` tab.
+1. Click on `Publish` in the sidebar.
+1. Click on `Run workflow`.
+1. Select a Branch. _Only branches configured in `release.config.js` will trigger a release. See the [semantic-release documentation](https://semantic-release.gitbook.io/semantic-release/usage/workflow-configuration#workflow-configuration) for more information._
+1. Click on `Run workflow`.
