@@ -1,6 +1,6 @@
 {
   "name": "lokalise-translations-action",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "GitHub Action for pushing and pulling translations from Lokalise",
   "module": "dist/index.js",
