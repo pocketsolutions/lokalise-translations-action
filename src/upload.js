@@ -18,12 +18,21 @@ async function uploadFile(httpClient, { project, filePath, ...options }) {
 
   const data = await fs.readFile(filePath, { encoding: 'base64' });
 
+  // eslint-disable-next-line no-console
+  console.log(`https://api.lokalise.co/api2/projects/${project}/files/upload`);
+  // eslint-disable-next-line no-console
+  console.log({
+    data,
+    filename: filePath,
+    lang_iso: locale,
+    convert_placeholders: false,
+  });
   return httpClient
     .postJson(`https://api.lokalise.co/api2/projects/${project}/files/upload`, {
       data,
       filename: filePath,
       lang_iso: locale,
-      convert_placeholders: true,
+      convert_placeholders: false,
     })
     .then(response => response?.result)
     .catch(error => {
