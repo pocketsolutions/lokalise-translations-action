@@ -22,6 +22,8 @@ export default async function download(httpClient, options) {
     {
       format: 'po',
       original_filenames: false,
+      export_empty_as: 'empty',
+      placeholder_format: 'icu',
       bundle_structure: toTranslationFilePath({ locale: '%LANG_ISO%' }),
     }
   );

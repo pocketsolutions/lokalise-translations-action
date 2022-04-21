@@ -23,6 +23,7 @@ async function uploadFile(httpClient, { project, filePath, ...options }) {
       data,
       filename: filePath,
       lang_iso: locale,
+      convert_placeholders: true,
     })
     .then(response => response?.result)
     .catch(error => {
