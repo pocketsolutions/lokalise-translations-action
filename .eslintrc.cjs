@@ -13,7 +13,7 @@ module.exports = {
     'import/extensions': [
       2,
       {
-        js: 'ignorePackages',
+        js: 'always',
       },
     ],
     'prettier/prettier': [

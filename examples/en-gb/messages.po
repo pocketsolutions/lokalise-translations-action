@@ -17,3 +17,7 @@ msgstr ""
 #, fuzzy
 msgid "Me"
 msgstr ""
+
+#, fuzzy
+msgid "{entryType, select, FileSystemFolder {Save Folder} FileSystemGuidance {Save Guidance} FileSystemDocument {Save Document} other {Save}}"
+msgstr "{entryType, select, FileSystemFolder {Save Folder} FileSystemGuidance {Save Guidance} FileSystemDocument {Save Document} other {Save}}"
