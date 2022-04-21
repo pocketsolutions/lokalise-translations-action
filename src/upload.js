@@ -23,7 +23,10 @@ async function uploadFile(httpClient, { project, filePath, ...options }) {
       data,
       filename: filePath,
       lang_iso: locale,
-      convert_placeholders: true,
+      // Lokalise seems to have a problem with their "Universal Placeholders".
+      // Lokalise has been notified and they are looking into it.
+      // We'll keep our own format for now.
+      convert_placeholders: false,
     })
     .then(response => response?.result)
     .catch(error => {
