@@ -15,7 +15,9 @@ async function extractZip(filePath, destinationPath) {
 }
 
 export default async function download(httpClient, options) {
-  const toTranslationFilePath = compile(options.path);
+  const toTranslationFilePath = compile(options.path, {
+    validate: false,
+  });
 
   const response = await httpClient.postJson(
     `https://api.lokalise.co/api2/projects/${options.project}/files/download`,

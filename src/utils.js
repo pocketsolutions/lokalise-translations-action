@@ -4,7 +4,10 @@ import { bcp47Normalize } from 'bcp-47-normalize';
 import { compile } from 'path-to-regexp';
 
 export function createGlobber(regexpPath) {
-  const toPath = compile(regexpPath);
+  // The validation is not relevant when converting to a glob-pattern.
+  const toPath = compile(regexpPath, {
+    validate: false,
+  });
   const globberPath = toPath({ locale: '*' });
 
   return glob.create(globberPath);

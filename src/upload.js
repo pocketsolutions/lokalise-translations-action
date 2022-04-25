@@ -45,16 +45,18 @@ export default async function upload(httpClient, { project, ...options }) {
   // eslint-disable-next-line no-restricted-syntax
   for await (const filePath of globber.globGenerator()) {
     const matchedPath = matchPath(filePath);
-    const { locale } = matchedPath.params;
+    if (matchedPath) {
+      const { locale } = matchedPath.params;
 
-    await uploadFile(httpClient, { project, locale, filePath }).catch(error => {
-      core.setFailed({
-        title: error.message,
-        file: filePath,
+      await uploadFile(httpClient, { project, locale, filePath }).catch(error => {
+        core.setFailed({
+          title: error.message,
+          file: filePath,
+        });
       });
-    });
 
-    uploadedPaths.push(filePath);
+      uploadedPaths.push(filePath);
+    }
   }
 
   return uploadedPaths;
