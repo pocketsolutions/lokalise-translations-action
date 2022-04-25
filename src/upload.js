@@ -2,11 +2,9 @@ import fs from 'fs/promises';
 import core from '@actions/core';
 import path from 'path';
 import { match } from 'path-to-regexp';
-import { serializeLocale, createGlobber } from './utils.js';
+import { createGlobber } from './utils.js';
 
-async function uploadFile(httpClient, { project, filePath, ...options }) {
-  const locale = serializeLocale(options.locale);
-
+async function uploadFile(httpClient, { project, filePath, locale }) {
   if (!locale) {
     core.warning({
       title: 'Unable to extract locale from path',
@@ -34,7 +32,7 @@ async function uploadFile(httpClient, { project, filePath, ...options }) {
     });
 }
 
-export default async function upload(httpClient, { project, ...options }) {
+export default async function upload(httpClient, localeNormalizer, { project, ...options }) {
   const absolutePath = path.resolve(process.cwd(), options.path);
   const matchPath = match(absolutePath);
 
@@ -46,7 +44,7 @@ export default async function upload(httpClient, { project, ...options }) {
   for await (const filePath of globber.globGenerator()) {
     const matchedPath = matchPath(filePath);
     if (matchedPath) {
-      const { locale } = matchedPath.params;
+      const locale = await localeNormalizer.normalize(matchedPath.params.locale);
 
       await uploadFile(httpClient, { project, locale, filePath }).catch(error => {
         core.setFailed({

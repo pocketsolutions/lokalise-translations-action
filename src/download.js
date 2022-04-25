@@ -3,7 +3,7 @@ import { exec } from '@actions/exec';
 import { downloadTool } from '@actions/tool-cache';
 import { compile, match } from 'path-to-regexp';
 import path from 'path';
-import { deserializeLocale, createGlobber } from './utils.js';
+import { createGlobber } from './utils.js';
 
 // Re-implementation of extractZip from @actions/tool-cache to preserve folder structure
 async function extractZip(filePath, destinationPath) {
@@ -14,7 +14,7 @@ async function extractZip(filePath, destinationPath) {
   await exec(`"${unzipPath}"`, args, { cwd: destinationPath });
 }
 
-export default async function download(httpClient, options) {
+export default async function download(httpClient, localeNormalizer, options) {
   const toTranslationFilePath = compile(options.path, {
     validate: false,
   });
@@ -46,13 +46,15 @@ export default async function download(httpClient, options) {
   // eslint-disable-next-line no-restricted-syntax
   for await (const sourceFilePath of globber.globGenerator()) {
     const matchedPath = matchTranslationFilePath(sourceFilePath);
-    const locale = deserializeLocale(matchedPath.params.locale);
-    const destinationFilePath = toTranslationFilePath({ locale });
+    if (matchedPath) {
+      const locale = await localeNormalizer.denormalize(matchedPath.params.locale);
+      const destinationFilePath = toTranslationFilePath({ locale });
 
-    await io.mkdirP(path.dirname(destinationFilePath));
-    await io.cp(sourceFilePath, destinationFilePath, { recursive: true });
+      await io.mkdirP(path.dirname(destinationFilePath));
+      await io.cp(sourceFilePath, destinationFilePath, { recursive: true });
 
-    downloadedPaths.push(destinationFilePath);
+      downloadedPaths.push(destinationFilePath);
+    }
   }
 
   return downloadedPaths;

@@ -8748,7 +8748,7 @@ async function extractZip(filePath, destinationPath) {
   await (0,exec.exec)(`"${unzipPath}"`, args, { cwd: destinationPath });
 }
 
-async function download(httpClient, options) {
+async function download(httpClient, localeNormalizer, options) {
   const toTranslationFilePath = (0,dist/* compile */.MY)(options.path, {
     validate: false,
   });
@@ -8779,17 +8779,16 @@ async function download(httpClient, options) {
 
   // eslint-disable-next-line no-restricted-syntax
   for await (const sourceFilePath of globber.globGenerator()) {
-    console.log('sourceFilePath', sourceFilePath);
     const matchedPath = matchTranslationFilePath(sourceFilePath);
-    console.log('matchedPath', matchedPath);
-    const locale = await localeNormalizer.denormalize(matchedPath.params.locale);
-    console.log('locale', locale);
-    const destinationFilePath = toTranslationFilePath({ locale });
+    if (matchedPath) {
+      const locale = await localeNormalizer.denormalize(matchedPath.params.locale);
+      const destinationFilePath = toTranslationFilePath({ locale });
 
-    await io.mkdirP(external_path_.dirname(destinationFilePath));
-    await io.cp(sourceFilePath, destinationFilePath, { recursive: true });
+      await io.mkdirP(external_path_.dirname(destinationFilePath));
+      await io.cp(sourceFilePath, destinationFilePath, { recursive: true });
 
-    downloadedPaths.push(destinationFilePath);
+      downloadedPaths.push(destinationFilePath);
+    }
   }
 
   return downloadedPaths;
