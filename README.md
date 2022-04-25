@@ -53,6 +53,9 @@ jobs:
           token: ${{ secrets.LOKALISE_TOKEN }}
           project: ${{ secrets.LOKALISE_PROJECT }}
           path: ./locales/:locale/messages.po
+          tags: |
+            main_app
+            internal_app
           download: true
 ```
 
@@ -61,6 +64,7 @@ jobs:
 - **token** `string` - A Lokalise API Token.
 - **project** `string` - The Lokalise project id.
 - **path** `string` - Path to localizaion (ex. gettext) files. [path-to-regexp](https://github.com/pillarjs/path-to-regexp) expressions are supported where the `:locale` parameter is required. The value of `:locale` is expected to be a valid locale according to [bcp-47](https://en.wikipedia.org/wiki/IETF_language_tag).
+- **tags** `string` - A newline-delimited string. Every newline represents a tag.
 - **upload** `boolean?` - Wether to upload files or not. Default is `false`.
 - **download** `boolean?` - Wether to download files or not. Default is `false`.
 

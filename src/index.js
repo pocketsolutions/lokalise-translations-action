@@ -18,6 +18,7 @@ function isValidPath(format) {
   const token = core.getInput('token', { required: true });
   const project = core.getInput('project', { required: true });
   const path = core.getInput('path', { required: true });
+  const tags = core.getMultilineInput('tags', { required: false });
   const upload = core.getBooleanInput('upload', { required: false });
   const download = core.getBooleanInput('download', { required: false });
 
@@ -30,7 +31,7 @@ function isValidPath(format) {
       throw new Error('Cannot download files on windows due to complicated unzip.');
     }
 
-    await action({ token, project, path, upload, download });
+    await action({ token, project, path, tags, upload, download });
   } catch (error) {
     core.setFailed(error.message);
   }

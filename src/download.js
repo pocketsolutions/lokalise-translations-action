@@ -23,6 +23,7 @@ export default async function download(httpClient, localeNormalizer, options) {
     `https://api.lokalise.co/api2/projects/${options.project}/files/download`,
     {
       format: 'po',
+      include_tags: options.tags,
       original_filenames: false,
       export_empty_as: 'empty',
       placeholder_format: 'icu',

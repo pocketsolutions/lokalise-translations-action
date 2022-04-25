@@ -4,7 +4,7 @@ import path from 'path';
 import { match } from 'path-to-regexp';
 import { createGlobber } from './utils.js';
 
-async function uploadFile(httpClient, { project, filePath, locale }) {
+async function uploadFile(httpClient, { project, tags, filePath, locale }) {
   if (!locale) {
     core.warning({
       title: 'Unable to extract locale from path',
@@ -19,6 +19,8 @@ async function uploadFile(httpClient, { project, filePath, locale }) {
   return httpClient
     .postJson(`https://api.lokalise.co/api2/projects/${project}/files/upload`, {
       data,
+      tags,
+      tag_skipped_keys: Boolean(tags),
       filename: filePath,
       lang_iso: locale,
       // Lokalise seems to have a problem with their "Universal Placeholders".
@@ -32,7 +34,7 @@ async function uploadFile(httpClient, { project, filePath, locale }) {
     });
 }
 
-export default async function upload(httpClient, localeNormalizer, { project, ...options }) {
+export default async function upload(httpClient, localeNormalizer, { project, tags, ...options }) {
   const absolutePath = path.resolve(process.cwd(), options.path);
   const matchPath = match(absolutePath);
 
@@ -46,7 +48,7 @@ export default async function upload(httpClient, localeNormalizer, { project, ..
     if (matchedPath) {
       const locale = await localeNormalizer.normalize(matchedPath.params.locale);
 
-      await uploadFile(httpClient, { project, locale, filePath }).catch(error => {
+      await uploadFile(httpClient, { project, tags, locale, filePath }).catch(error => {
         core.setFailed({
           title: error.message,
           file: filePath,

@@ -8669,7 +8669,7 @@ function createGlobber(regexpPath) {
 
 
 
-async function uploadFile(httpClient, { project, filePath, locale }) {
+async function uploadFile(httpClient, { project, tags, filePath, locale }) {
   if (!locale) {
     core.warning({
       title: 'Unable to extract locale from path',
@@ -8684,6 +8684,8 @@ async function uploadFile(httpClient, { project, filePath, locale }) {
   return httpClient
     .postJson(`https://api.lokalise.co/api2/projects/${project}/files/upload`, {
       data,
+      tags,
+      tag_skipped_keys: Boolean(tags),
       filename: filePath,
       lang_iso: locale,
       // Lokalise seems to have a problem with their "Universal Placeholders".
@@ -8697,7 +8699,7 @@ async function uploadFile(httpClient, { project, filePath, locale }) {
     });
 }
 
-async function upload(httpClient, localeNormalizer, { project, ...options }) {
+async function upload(httpClient, localeNormalizer, { project, tags, ...options }) {
   const absolutePath = external_path_.resolve(process.cwd(), options.path);
   const matchPath = (0,dist/* match */.EQ)(absolutePath);
 
@@ -8711,7 +8713,7 @@ async function upload(httpClient, localeNormalizer, { project, ...options }) {
     if (matchedPath) {
       const locale = await localeNormalizer.normalize(matchedPath.params.locale);
 
-      await uploadFile(httpClient, { project, locale, filePath }).catch(error => {
+      await uploadFile(httpClient, { project, tags, locale, filePath }).catch(error => {
         core.setFailed({
           title: error.message,
           file: filePath,
@@ -8757,6 +8759,7 @@ async function download(httpClient, localeNormalizer, options) {
     `https://api.lokalise.co/api2/projects/${options.project}/files/download`,
     {
       format: 'po',
+      include_tags: options.tags,
       original_filenames: false,
       export_empty_as: 'empty',
       placeholder_format: 'icu',
@@ -8858,6 +8861,7 @@ function isValidPath(format) {
   const token = core.getInput('token', { required: true });
   const project = core.getInput('project', { required: true });
   const path = core.getInput('path', { required: true });
+  const tags = core.getMultilineInput('tags', { required: false });
   const upload = core.getBooleanInput('upload', { required: false });
   const download = core.getBooleanInput('download', { required: false });
 
@@ -8870,7 +8874,7 @@ function isValidPath(format) {
       throw new Error('Cannot download files on windows due to complicated unzip.');
     }
 
-    await action({ token, project, path, upload, download });
+    await action({ token, project, path, tags, upload, download });
   } catch (error) {
     core.setFailed(error.message);
   }
