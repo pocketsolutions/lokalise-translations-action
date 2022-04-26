@@ -12,6 +12,9 @@ inputs:
     required: true
     description: |
       Direcotry path for translation files to upload. It supports path-to-regexp expressions and you must define the :locale param. Example: ./examples/:locale/messages.po.
+  tags:
+    required: false
+    description: A list of tags. The list is a newline-delimited string.
   upload:
     required: false
     default: false

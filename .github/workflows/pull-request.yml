@@ -32,6 +32,9 @@ jobs:
           token: ${{ secrets.LOKALISE_TEST_TOKEN }}
           project: ${{ secrets.LOKALISE_TEST_PROJECT }}
           path: ./examples/:locale/messages.po
+          tags: |
+            main_app
+            internal_app
           upload: true
       - name: Output
         run: |

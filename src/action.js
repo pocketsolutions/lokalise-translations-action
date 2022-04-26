@@ -1,6 +1,7 @@
 import { HttpClient } from '@actions/http-client';
 import core from '@actions/core';
 import LokaliseAuthHandler from './lib/LokaliseAuthHandler.js';
+import LocaleNormalizer from './lib/LocaleNormalizer.js';
 import upload from './upload.js';
 import download from './download.js';
 
@@ -20,17 +21,18 @@ function newLineList(list) {
 export default async function action(options) {
   const authHandler = new LokaliseAuthHandler(options.token);
   const httpClient = new HttpClient('translate-action', [authHandler]);
+  const localeNormalizer = new LocaleNormalizer(httpClient);
 
   try {
     if (options.upload) {
       core.debug('upload: true');
-      const uploadedPaths = await upload(httpClient, options);
+      const uploadedPaths = await upload(httpClient, localeNormalizer, options);
       core.setOutput('uploads', newLineList(uploadedPaths));
     }
 
     if (options.download) {
       core.debug('download: true');
-      const downloadedPaths = await download(httpClient, options);
+      const downloadedPaths = await download(httpClient, localeNormalizer, options);
       core.setOutput('downloads', newLineList(downloadedPaths));
     }
   } catch (error) {
