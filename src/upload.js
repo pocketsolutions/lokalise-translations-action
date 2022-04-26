@@ -20,6 +20,8 @@ async function uploadFile(httpClient, { project, tags, filePath, locale }) {
     .postJson(`https://api.lokalise.co/api2/projects/${project}/files/upload`, {
       data,
       tags,
+      // The following will tag keys even tho they weren't inserted nor updated.
+      // We want to enable this as some keys may be shared across applications.
       tag_skipped_keys: Boolean(tags),
       filename: filePath,
       lang_iso: locale,
