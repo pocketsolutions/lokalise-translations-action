@@ -37,7 +37,7 @@
     "semantic-release": "^19.0.2"
   },
   "dependencies": {
-    "@actions/core": "^1.6.0",
+    "@actions/core": "^1.7.0",
     "@actions/exec": "^1.1.1",
     "@actions/glob": "^0.2.1",
     "@actions/http-client": "^1.0.11",
