@@ -22,7 +22,7 @@
     "url": "git@github.com:pocketsolutions/lokalise-translations-action.git"
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.2.3",
+    "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^16.2.1",
     "@semantic-release/git": "^10.0.1",
     "@vercel/ncc": "^0.33.3",
